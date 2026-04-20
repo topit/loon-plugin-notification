@@ -1,0 +1,20 @@
+#!name=BOC 请求推送通知
+#!desc=监测 boc.inke.cn 和 testqaboc.inke.cn 的请求，发送 iOS 系统推送通知，点击可在 Safari 打开；同时支持 Bark 推送到 macOS
+#!author=topit
+#!homepage=https://github.com/topit/loon-plugin-notification
+#!icon=https://raw.githubusercontent.com/niconiemi/loon-plugins/main/icons/notification.png
+#!system=ios
+#!loon_version=3.2.1(730)
+
+[Argument]
+enable_plugin = switch,true,tag=启用推送,desc=总开关，控制请求推送通知功能是否生效
+enable_safari = switch,true,tag=iOS 打开 Safari,desc=点击 iOS 通知后在 Safari 中打开对应链接
+enable_bark = switch,false,tag=启用 Bark 推送,desc=通过 Bark 推送通知到 macOS
+bark_key = input,"",tag=Bark Key,desc=从 Bark App 获取的推送 Key
+bark_endpoint = input,"https://api.day.app",tag=Bark 服务器地址,desc=Bark 服务器地址，默认官方节点
+
+[Script]
+http-request ^https?://(boc\.inke\.cn|testqaboc\.inke\.cn)/(.*)\.(html|htm|php|asp|aspx|jsp)(\?.*)?$ script-path=https://raw.githubusercontent.com/topit/loon-plugin-notification/main/push_notification.js,tag=请求推送通知,argument=[{enable_safari},{enable_bark},{bark_key},{bark_endpoint}],enable={enable_plugin}
+
+[MITM]
+hostname = boc.inke.cn,testqaboc.inke.cn
